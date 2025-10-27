@@ -19,6 +19,11 @@ namespace Sharp_231.Library
         {
             return "Non Printable";
         }
+        [CiteStyle("IEEE")]
+        public void ShowIeee()
+        {
+            Console.WriteLine($"[Poster: \"{Title}\" ({Subject}), {Publisher}]");
+        }
 
     }
 }

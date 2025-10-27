@@ -27,5 +27,10 @@ namespace Sharp_231.Library
             Console.WriteLine($"In colors '{colorScheme}' printing... " + GetCard());
 
         }
+        [CiteStyle("IEEE")]
+        public void ShowIeee()
+        {
+            Console.WriteLine($"[{Author}, \"{Title}: {Subject}\", {Publisher}]");
+        }
     }
 }

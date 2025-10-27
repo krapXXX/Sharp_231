@@ -19,5 +19,10 @@ namespace Sharp_231.Library
         {
             return "Day";
         }
+        [CiteStyle("IEEE")]
+        public void ShowIeee()
+        {
+            Console.WriteLine($"[\"{Title}\", {Publisher}, {Date:dd.MM.yyyy}]");
+        }
     }
 }

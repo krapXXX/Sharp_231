@@ -20,13 +20,10 @@ namespace Sharp_231.Library
             return "Month";
         }
 
-
-
-        [ApaStyle]
-        public void ApaCard()
+        [CiteStyle("IEEE")]
+        public void ShowIeee()
         {
-            Console.WriteLine($"{base.Title} ({Number}) - {base.Publisher}");
-
+            Console.WriteLine($"[\"{Title}\", no. {Number}, {Publisher}]");
         }
     }
 }

@@ -70,16 +70,16 @@ namespace Sharp_231.Library
 
         }
         
-        public void ShowApaCard()
+        public void ShowCiteCard(string StyleName)
         {
             foreach (Literature literature in Funds)
             {
-                foreach (var style in literature.GetType().GetMethods())
+                foreach (var method in literature.GetType().GetMethods())
                 {
-                    var attr = style.GetCustomAttribute<ApaStyleAttribute>();
-                    if (attr != null)
+                    var attr = method.GetCustomAttribute<CiteStyleAttribute>();
+                    if (attr != null && attr.Style==StyleName)
                     {
-                            style.Invoke(literature, null);
+                        method.Invoke(literature, null);
                     }
                 }
             }

@@ -108,7 +108,9 @@ void ShowReflection()
 
 
     Console.WriteLine("\n-------------------APA-----------------");
-    library.ShowApaCard();
+    library.ShowCiteCard("APA");
+    Console.WriteLine("\n------------------IEEE-----------------");
+    library.ShowCiteCard("IEEE");
 
 }
 void ShowLibrary()

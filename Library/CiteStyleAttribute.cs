@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 namespace Sharp_231.Library
 {
     [AttributeUsage(AttributeTargets.Method)]
-    internal class ApaStyleAttribute:Attribute
+    internal class CiteStyleAttribute:Attribute
     {
+        public string Style { get; }
 
+        public CiteStyleAttribute(string style)
+        {
+            Style = style;
+        }
     }
 }

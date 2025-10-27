@@ -28,11 +28,10 @@ namespace Sharp_231.Library
             return $"{this.Author}, {base.Title} - {base.Publisher} - {this.Year}";
         }
 
-        [ApaStyle]
-        public void ApaCard()
+        [CiteStyle("APA")]
+        public void ShowApa()
         {
-            Console.WriteLine( $"{this.Author}, ({this.Year}) {base.Title}. {base.Publisher}");
-
+            Console.WriteLine($"{Author} ({Year}). {Title}. {Publisher}.");
         }
     }
 

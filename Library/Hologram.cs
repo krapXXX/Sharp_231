@@ -18,5 +18,10 @@ namespace Sharp_231.Library
         {
            return "Non Printable";
         }
+        [CiteStyle("IEEE")]
+        public void ShowIeee()
+        {
+            Console.WriteLine($"[\"{Title}\", hologram of {ArtItem}, {Publisher}]");
+        }
     }
 }
