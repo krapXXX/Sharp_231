@@ -8,12 +8,31 @@ namespace Sharp_231.Library
 {
     public class Book : Literature
     {
+        //auto-property - повністю реалізується автоматично
         public String Author { get; set; } = null!;
-        public int Year { get; set; }
+        // property - з явною реалізацією
+        private int _year;
+        public int Year {
+            get => _year;
+            set 
+            {
+                if (_year != value)
+                {
+                    _year = value;
+                }
+            }
+        }
 
         public override string GetCard()
         {
             return $"{this.Author}, {base.Title} - {base.Publisher} - {this.Year}";
+        }
+
+        [ApaStyle]
+        public void ApaCard()
+        {
+            Console.WriteLine( $"{this.Author}, ({this.Year}) {base.Title}. {base.Publisher}");
+
         }
     }
 
@@ -34,13 +53,12 @@ public - загальний доступ
 
 складові 
 поля (fields) - описані змінні всередині класу
-методи 
-властивості (properties)  
-аксесори (get, set)
+методи  ---> конструктори
+властивості (properties) ---> аксесори (get, set)
 події (events)
 
 доступність елементів
-зrivate - тільки в данному класі
+private - тільки в данному класі
 protected - тільки для нашадків
 public -загальний доступ
 

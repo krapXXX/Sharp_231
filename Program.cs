@@ -2,14 +2,126 @@
 using Sharp_231.Library;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 Console.OutputEncoding = Encoding.UTF8;
+//ShowLibrary();
+ShowReflection();
+
+void ShowReflection()
+{
+    /*
+     Рефлекксія в ООП - інструментарій мови/платформи, 
+     який дозволяє одержувати відомості про склад типу даних
+     */
+    Type bookType = typeof(Book);
+    FieldInfo[] fields = bookType.GetFields();
+    if (fields.Length > 0)
+    {
+        Console.WriteLine("Type 'Book' has fields: ");
+        foreach (var field in fields)
+        {
+            Console.WriteLine(field.Name);
+        }
+    }
+    else
+    {
+        Console.WriteLine("Type 'Book' has NO fields!");
+    }
+    PropertyInfo[] props = bookType.GetProperties();
+    if (props.Length > 0)
+    {
+        Console.WriteLine("Type 'Book' has props: ");
+        foreach (var prop in props)
+        {
+            Console.WriteLine("{0}:{1}",prop.Name, prop.PropertyType.Name);
+        }
+    }
+    else
+    {
+        Console.WriteLine("Type 'Book' has NO props!");
+    }
+    MethodInfo[] meths = bookType.GetMethods();
+    if (meths.Length > 0)
+    {
+        Console.WriteLine("Type 'Book' has methods: ");
+        foreach (var meth in meths)
+        {
+            Console.WriteLine(meth.Name);
+        }
+    }
+    else
+    {
+        Console.WriteLine("Type 'Book' has NO methods!");
+    }
+    EventInfo[] events = bookType.GetEvents();
+    if (events.Length > 0)
+    {
+        Console.WriteLine("Type 'Book' has events: ");
+        foreach (var eve in events)
+        {
+            Console.WriteLine(eve.Name);
+        }
+    }
+    else
+    {
+        Console.WriteLine("Type 'Book' has NO events!");
+    }
+    Console.WriteLine("\n-------------------Рефлексія за об'єктом------------------");
+    Literature j = new Journal()
+    {
+        Title = "ArgC & ArgV",
+        Number = "2(113), 2000",
+        Publisher = "https://journals.ua/technology/argc-argv/"
+    };
+    Type jType = j.GetType();
+    Console.WriteLine(jType.Name);
+    // Journal - змінна типізується за об'єктом, а не за оголошенням
+    PropertyInfo? propN = jType.GetProperty("Number");
+    if (propN != null)
+    {
+        //prop - відомості про тип даних, а не про об'єкт
+        var number = propN.GetValue(j);// -> j.Number
+        Console.WriteLine($"Object has 'Number' property with value '{number}'");
+    }
+    else
+    {
+        //"класична типізація" - якщо щось ходить як качка
+        //та видає звуки як качка, то це і є качка
+        //програмний прийом за якого визначається
+        //не сам тип, а наявність у ньому певних методів/складових
+       //замість перевірки умовного інтерфейсму IPrintable
+       //перевіряється наявність метода Print()
+
+        Console.WriteLine($"Object has no 'Number'");
+    }
+    Library library = new();
+    Console.WriteLine("\n---------------Printable---------------");
+    library.ShowPrintable();
+
+    Console.WriteLine("\n-------------Color Printable-----------");
+    library.ShowColorPrintable();
+
+    Console.WriteLine("\n-------------Non Printable-------------");
+    library.ShowNonPrintable();
 
 
-Library library = new();
-library.PrintCatalog();
+    Console.WriteLine("\n-------------------APA-----------------");
+    library.ShowApaCard();
 
-// Problem1();
+}
+void ShowLibrary()
+{
+    Library library = new();
+    library.PrintCatalog();
+    Console.WriteLine("\n__________Periodic______________");
+    library.PrintPeriodic();
+    Console.WriteLine("\n_________Non_Periodic___________");
+    library.PrintNonPeriodic();
+    Console.WriteLine("________________________________");
+}
+
 void Collections()
 {
         //\ед ліст більш корисний для модифікаці, встановлуються, видаляються елеиенти

@@ -15,5 +15,17 @@ namespace Sharp_231.Library
         {
             return $"{Author}, {base.Title} - {Subject}";
         }
+
+        public void Print()
+        {
+            Console.WriteLine("Printing... " + GetCard());
+        }
+
+        [ColorPrint(Copies =2)]//ending '...Attribute' optional
+        public void PrintWithColor(String colorScheme)
+        {
+            Console.WriteLine($"In colors '{colorScheme}' printing... " + GetCard());
+
+        }
     }
 }
