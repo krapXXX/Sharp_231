@@ -13,19 +13,19 @@ Console.OutputEncoding = Encoding.UTF8;
 //ShowLibrary();
 //ShowReflection();
 //new VectorDemo().Run();
-new FractionDemo().Run();
+//new FractionDemo().Run();
 
-//try
-//{
-//    new ExceptionsDemo().Run();
-//}
-//catch(Exception ex)
-//{
-//    //логічних дій з винятком на данному рівні передбачити важко
-//    //здійснюється логування(запис даних) про аварійну зупинку програми
-//    //у режимі розробника це ще може бути error-page
-//    Console.WriteLine("Не обраблений у програмі виняток: " + ex.ToString());
-//}
+try
+{
+    new ExceptionsDemo().Run();
+}
+catch (Exception ex)
+{
+    //логічних дій з винятком на данному рівні передбачити важко
+    //здійснюється логування(запис даних) про аварійну зупинку програми
+    //у режимі розробника це ще може бути error-page
+    Console.WriteLine("Не обраблений у програмі виняток: " + ex.ToString());
+}
 void ShowReflection()
 {
     /*

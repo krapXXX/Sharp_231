@@ -18,22 +18,27 @@ namespace Sharp_231.Exeptions
         public void Run()
         {
             Console.WriteLine("Exсeptions Demo");
-            try
+            while (true)
             {
-                String str = "4";
-                Console.WriteLine("Sqrt of {0} = {1}", str, SqrtFromString(str));
-            }
-            catch(ArgumentOutOfRangeException)
-            {
-                Console.WriteLine("Аргумент не може бути перетворений до числа");
-            }
-            catch (InvalidOperationException)
-            {
-                Console.WriteLine("Неможливо обчислити корінь з від'ємного числа");
-            }
-            catch (Exception ex) when (ex is ArgumentNullException || ex is ArgumentException)
-            {
-                Console.WriteLine("Зафіксовано null або порожній рядок в аргументі");
+                Console.Write("Введіть число для обчислення кореня: ");
+                string str = Console.ReadLine();
+                try
+                {
+                    Console.WriteLine("Sqrt of {0} = {1}", str, SqrtFromString(str));
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    Console.WriteLine("Аргумент не може бути перетворений до числа");
+                }
+                catch (InvalidOperationException)
+                {
+                    Console.WriteLine("Неможливо обчислити корінь з від'ємного числа");
+                }
+                catch (Exception ex) when (ex is ArgumentNullException || ex is ArgumentException)
+                {
+                    Console.WriteLine("Зафіксовано null або порожній рядок в аргументі");
+                }
+                Console.WriteLine("Cпробуйте знову.\n");
             }
         }
         public void Run1()
