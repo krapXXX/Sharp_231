@@ -1,14 +1,31 @@
 ﻿//Колекції: можуть мати об'єкти різного типу, не обов'язково послідовні, варіативний розмір
+using Sharp_231.Exeptions;
+using Sharp_231.Fractions;
 using Sharp_231.Library;
+using Sharp_231.Vectors;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 Console.OutputEncoding = Encoding.UTF8;
-//ShowLibrary();
-ShowReflection();
 
+//ShowLibrary();
+//ShowReflection();
+//new VectorDemo().Run();
+new FractionDemo().Run();
+
+//try
+//{
+//    new ExceptionsDemo().Run();
+//}
+//catch(Exception ex)
+//{
+//    //логічних дій з винятком на данному рівні передбачити важко
+//    //здійснюється логування(запис даних) про аварійну зупинку програми
+//    //у режимі розробника це ще може бути error-page
+//    Console.WriteLine("Не обраблений у програмі виняток: " + ex.ToString());
+//}
 void ShowReflection()
 {
     /*
@@ -35,7 +52,7 @@ void ShowReflection()
         Console.WriteLine("Type 'Book' has props: ");
         foreach (var prop in props)
         {
-            Console.WriteLine("{0}:{1}",prop.Name, prop.PropertyType.Name);
+            Console.WriteLine("{0}:{1}", prop.Name, prop.PropertyType.Name);
         }
     }
     else
@@ -91,8 +108,8 @@ void ShowReflection()
         //та видає звуки як качка, то це і є качка
         //програмний прийом за якого визначається
         //не сам тип, а наявність у ньому певних методів/складових
-       //замість перевірки умовного інтерфейсму IPrintable
-       //перевіряється наявність метода Print()
+        //замість перевірки умовного інтерфейсму IPrintable
+        //перевіряється наявність метода Print()
 
         Console.WriteLine($"Object has no 'Number'");
     }
@@ -126,8 +143,8 @@ void ShowLibrary()
 
 void Collections()
 {
-        //\ед ліст більш корисний для модифікаці, встановлуються, видаляються елеиенти
-        List < String > list = [];
+    //\ед ліст більш корисний для модифікаці, встановлуються, видаляються елеиенти
+    List<String> list = [];
     list.Add("str1");
     list.Add("str2");
     list.Add("str3");
@@ -136,7 +153,7 @@ void Collections()
     foreach (string s in list)
     {
         Console.WriteLine(s);
-};
+    };
     LinkedList<string> list2 = [];
     list.Add("str1");
     list.Add("str2");
@@ -280,7 +297,7 @@ void Problem1()
         {
             even += 1;
         }
-        else 
+        else
         {
             odd += 1;
         }
