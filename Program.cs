@@ -1,5 +1,6 @@
 ﻿//Колекції: можуть мати об'єкти різного типу, не обов'язково послідовні, варіативний розмір
 using Sharp_231.Exeptions;
+using Sharp_231.Files;
 using Sharp_231.Fractions;
 using Sharp_231.Library;
 using Sharp_231.Vectors;
@@ -14,10 +15,10 @@ Console.OutputEncoding = Encoding.UTF8;
 //ShowReflection();
 //new VectorDemo().Run();
 //new FractionDemo().Run();
-
 try
 {
-    new ExceptionsDemo().Run();
+   // new ExceptionsDemo().Run();
+    new FilesDemo().Run();
 }
 catch (Exception ex)
 {

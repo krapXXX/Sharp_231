@@ -3,13 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Sharp_231.Library
 {
     public class Library
     {
+        [JsonInclude]
         private List<Literature> Funds { get; set; } = [];
+
+        public static Library FromJson(string json)
+        {
+            Library library = new Library();
+            library.Funds.Clear();
+
+            var j = JsonSerializer.Deserialize<JsonNode>(json);
+            foreach (var element in j.AsObject()["Funds"].AsArray())
+            {
+                JsonObject jo = element.AsObject();
+                if (jo.ContainsKey("Author"))
+                {
+                    library.Funds.Add(jo.GetValue<Book>());
+                }
+            }
+            return library;
+        }
 
         public Library()
         {
