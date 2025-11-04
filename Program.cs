@@ -18,7 +18,7 @@ Console.OutputEncoding = Encoding.UTF8;
 try
 {
    // new ExceptionsDemo().Run();
-    new FilesDemo().Run();
+    new FilesDemo().RunLog();
 }
 catch (Exception ex)
 {

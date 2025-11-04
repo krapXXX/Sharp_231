@@ -15,7 +15,7 @@ namespace Sharp_231.Library
         [JsonInclude]
         private List<Literature> Funds { get; set; } = [];
 
-        public static Library FromJson(string json)
+        public static Library FromJson(String json)
         {
             Library library = new Library();
             library.Funds.Clear();

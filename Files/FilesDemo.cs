@@ -17,8 +17,8 @@ namespace Sharp_231.Files
             if (number == 1) return 1;
             return 2;
         }
-       
-        public void Run()
+
+        public void Run5()
         {
             //Serializing
             Library.Library library = new();
@@ -46,6 +46,7 @@ namespace Sharp_231.Files
                     return;
                 }
             }
+
             String logFile = "runlogs.txt";
             String logPath = Path.Combine(logDir, logFile);
             if (!File.Exists(logPath))
@@ -59,6 +60,21 @@ namespace Sharp_231.Files
                     Console.WriteLine("Неможливо створити файл логування " + ex.Message);
                     return;
                 }
+
+            }
+           
+            FileInfo f = new FileInfo(logPath);
+            if (f.Length > 100)
+            {
+                int i = 1;
+                string newLogName;
+                do
+                {
+                    newLogName = $"runlogs_{i}.txt";
+                    i++;
+                } while (File.Exists(Path.Combine(logDir, newLogName)));
+                logPath = Path.Combine(logDir, newLogName);
+                File.Create(logPath).Dispose();
             }
             try
             {
@@ -87,7 +103,7 @@ namespace Sharp_231.Files
                 Console.WriteLine(lines[i]);
             }
         }
-       
+
         public void Run4()
         {
             string dir = Directory.GetCurrentDirectory();
@@ -126,7 +142,6 @@ namespace Sharp_231.Files
                 Console.WriteLine(ex.ToString());
             }
         }
-
         public void Run2()
         {
 
