@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sharp_231.Events.Notifyer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,38 @@ namespace SharpKnP321.Events.Notifier
 {
     internal class GlobalState
     {
-        public double Price { get; set; }
+        private static GlobalState? _instance = null;
+        public static GlobalState Instance => _instance ??= new();
+
+        private GlobalState() { }
+        public double Price { get; set; } = 100.0;
         public DateTime LastSyncMoment { get; set; }
-        public String? UserName { get; set; }
+        public String? UserName { get; set; } = "Admin";
         public String ActivePage { get; set; } = "Home";
+
+        public void SetPrice(double value)
+        {
+            Price = value;
+            Position.Instance.Notify(nameof(Price));
+        }
+
+        public void SetUser(string user)
+        {
+            UserName = user;
+            Position.Instance.Notify(nameof(UserName));
+        }
+
+        public void SetPage(string page)
+        {
+            ActivePage = page;
+            Position.Instance.Notify(nameof(ActivePage));
+        }
+
+        public void SetSync(DateTime moment)
+        {
+            LastSyncMoment = moment;
+            Position.Instance.Notify(nameof(LastSyncMoment));
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using Sharp_231.Events.Actions;
 using Sharp_231.Events.Delegate;
+using Sharp_231.Events.Notifyer;
 using Sharp_231.Events.Observer;
 using System;
 using System.Collections.Generic;
@@ -17,20 +18,22 @@ namespace Sharp_231.Events
             try
             {
 
-                new ObserverDemo().Run();
+                //new ObserverDemo().Run();
 
-                new ActionsDemo().Run();
+                //new ActionsDemo().Run();
 
-                new DelegateDemo().Run();
+                //new DelegateDemo().Run();
 
-                Console.WriteLine("\n     Emmiter Demo");
+                //Console.WriteLine("\n     Emmiter Demo");
 
-                Emitter emitter = new(initialPrice: 100.0);
-                PriceComponent pc = new();
-                CartComponent cc = new();
-                ProductComponent prc = new();
-                Console.WriteLine("---------------------");
-                emitter.Price = 200.0;
+                //Emitter emitter = new(initialPrice: 100.0);
+                //PriceComponent pc = new();
+                //CartComponent cc = new();
+                //ProductComponent prc = new();
+                //Console.WriteLine("---------------------");
+                //emitter.Price = 200.0;
+                new NotifyerDemo().Run();
+
             }
             catch (Exception ex)
             {

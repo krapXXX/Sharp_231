@@ -19,8 +19,8 @@ Console.OutputEncoding = Encoding.UTF8;
 //new FractionDemo().Run();
 try
 {
-   // new EventsDemo().Run();
-    new ExtensionsDemo().Run();
+    new EventsDemo().Run();
+   // new ExtensionsDemo().Run();
 }
 catch (Exception ex)
 {
