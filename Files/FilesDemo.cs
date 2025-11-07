@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace Sharp_231.Files
@@ -18,12 +21,32 @@ namespace Sharp_231.Files
             return 2;
         }
 
-        public void Run5()
+        public void Run()
         {
             //Serializing
             Library.Library library = new();
-            String lib = System.Text.Json.JsonSerializer.Serialize(library);
-            Library.Library.FromJson(lib).PrintCatalog();
+            library.Init();
+            var options = new JsonSerializerOptions { 
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
+                WriteIndented = true 
+            };
+            String lib = System.Text.Json.JsonSerializer.Serialize(library, options);
+            Console.WriteLine(lib);
+            File.WriteAllText("library.json", lib);
+            
+            //Deserializing
+            Library.Library library2;
+            try
+            {
+                library2 = JsonSerializer.Deserialize<Library.Library>(lib)!;
+                                    // ?? throw new NullReferenceException();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
+            library2.PrintCatalog();
 
             Vectors.Vector v = new() { X = 10, Y = 20 };
             string j = System.Text.Json.JsonSerializer.Serialize(v);

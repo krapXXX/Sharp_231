@@ -34,6 +34,10 @@ namespace Sharp_231.Library
 
         public Library()
         {
+
+        }
+        public void Init()
+        {
             Funds.Add(new Book
             {
                 Author = "D. Knuth",
@@ -41,8 +45,6 @@ namespace Sharp_231.Library
                 Publisher = "Київ, Наукова Думка",
                 Year = 2000
             });
-
-
 
             Funds.Add(new Book
             {
@@ -77,7 +79,7 @@ namespace Sharp_231.Library
 
             Funds.Add(new Hologram
             {
-                Title="Скіфське мистецтво",
+                Title = "Скіфське мистецтво",
                 ArtItem = "Золота пектораль",
                 Publisher = "Студія 'Лазер'"
             });
@@ -88,9 +90,7 @@ namespace Sharp_231.Library
                 Subject = "A New Hope",
                 Publisher = "20th Century Fox"
             });
-
         }
-        
         public void ShowCiteCard(string StyleName)
         {
             foreach (Literature literature in Funds)

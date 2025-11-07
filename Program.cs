@@ -1,5 +1,7 @@
 ﻿//Колекції: можуть мати об'єкти різного типу, не обов'язково послідовні, варіативний розмір
+using Sharp_231.Events;
 using Sharp_231.Exeptions;
+using Sharp_231.Extensions;
 using Sharp_231.Files;
 using Sharp_231.Fractions;
 using Sharp_231.Library;
@@ -17,15 +19,15 @@ Console.OutputEncoding = Encoding.UTF8;
 //new FractionDemo().Run();
 try
 {
-   // new ExceptionsDemo().Run();
-    new FilesDemo().RunLog();
+   // new EventsDemo().Run();
+    new ExtensionsDemo().Run();
 }
 catch (Exception ex)
 {
     //логічних дій з винятком на данному рівні передбачити важко
     //здійснюється логування(запис даних) про аварійну зупинку програми
     //у режимі розробника це ще може бути error-page
-    Console.WriteLine("Не обраблений у програмі виняток: " + ex.ToString());
+    Console.WriteLine("Не оброблений у програмі виняток: " + ex.ToString());
 }
 void ShowReflection()
 {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sharp_231.Library
 {
-    internal interface IPeriodic
+    public interface IPeriodic
     {
         String GetPeriod();
 
