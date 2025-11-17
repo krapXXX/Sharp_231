@@ -1,4 +1,7 @@
 ﻿//Колекції: можуть мати об'єкти різного типу, не обов'язково послідовні, варіативний розмір
+using Sharp_231.Collection;
+using Sharp_231.Data;
+using Sharp_231.Dict;
 using Sharp_231.Events;
 using Sharp_231.Exeptions;
 using Sharp_231.Extensions;
@@ -19,8 +22,9 @@ Console.OutputEncoding = Encoding.UTF8;
 //new FractionDemo().Run();
 try
 {
-    new EventsDemo().Run();
-   // new ExtensionsDemo().Run();
+    Console.OutputEncoding = System.Text.Encoding.Unicode;
+    Console.InputEncoding = System.Text.Encoding.Unicode;
+    new DataDemo().Run();
 }
 catch (Exception ex)
 {
