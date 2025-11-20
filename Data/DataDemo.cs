@@ -23,7 +23,7 @@ namespace Sharp_231.Data
             {
                 Console.WriteLine("Connection failed: " + ex.Message);
             }
-            DataAccessor dataAccessor = new(connection);
+            DataAccessor dataAccessor = new();
             // dataAccessor.Install();
             //dataAccessor.Seed();
             List<Product> products = dataAccessor.GetProducts();

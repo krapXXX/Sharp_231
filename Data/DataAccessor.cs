@@ -13,9 +13,18 @@ namespace Sharp_231.Data
     {
         private readonly SqlConnection connection;
 
-        public DataAccessor(SqlConnection connection)
+        public DataAccessor()
         {
-            this.connection = connection;
+            String connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\arina\source\repos\Sharp_231\Data\Database1.mdf;Integrated Security=True";
+            this.connection = new(connectionString);
+            try
+            {
+                this.connection.Open();   // підключення необхідно відкривати окремою командою
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine("Connection failed: " + ex.Message);
+            }
         }
         public List<Product> GetProducts()
         {
@@ -38,15 +47,62 @@ namespace Sharp_231.Data
             }
             return products;
         }
-        
+
         public void Install()
         {
-            string sql = "create table Products(" +
-"id uniqueidentifier primary key, " +
-"name nvarchar(64) not null, " +
-"price decimal(14,2) not null)";
-            
+            InstallProducts();
+            InstallDepartments();
+            InstallManagers();
         }
+        private void InstallManagers()
+        {
+            String sql = "CREATE TABLE Managers(" +
+                "Id           UNIQUEIDENTIFIER PRIMARY KEY," +
+                "DepartmentId UNIQUEIDENTIFIER NOT NULL," +
+                "Name         NVARCHAR(64)     NOT NULL," +
+                "WorksFrom    DATETIME2        NOT NULL  DEFAULT CURRENT_TIMESTAMP)";
+            using SqlCommand cmd = new(sql, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();   // без зворотнього результату
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Command failed: {0}\n{1}", ex.Message, sql);
+            }
+        }
+        private void InstallDepartments()
+        {
+            String sql = "CREATE TABLE Departments(" +
+                "Id    UNIQUEIDENTIFIER PRIMARY KEY," +
+                "Name  NVARCHAR(64)     NOT NULL)";
+            using SqlCommand cmd = new(sql, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();   // без зворотнього результату
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Command failed: {0}\n{1}", ex.Message, sql);
+            }
+        }
+        private void InstallProducts()
+        {
+            String sql = "CREATE TABLE Products(" +
+                "Id    UNIQUEIDENTIFIER PRIMARY KEY," +
+                "Name  NVARCHAR(64)     NOT NULL," +
+                "Price DECIMAL(14,2)    NOT NULL)";
+            using SqlCommand cmd = new(sql, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();   // без зворотнього результату
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Command failed: {0}\n{1}", ex.Message, sql);
+            }
+        }
+
         public void Seed()
         {
             String sql = "Insert into Products values" +
