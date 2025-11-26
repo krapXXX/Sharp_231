@@ -3,6 +3,7 @@ using Sharp_231.Data.Dto;
 using Sharp_231.Events;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,37 +14,138 @@ namespace Sharp_231.Data
     {
         public void Run()
         {
-            String connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\arina\source\repos\Sharp_231\Data\Database1.mdf;Integrated Security=True";
-            SqlConnection connection = new(connectionString);
-            try
-            {
-                connection.Open();
-            }
-            catch (SqlException ex)
-            {
-                Console.WriteLine("Connection failed: " + ex.Message);
-            }
+
             DataAccessor dataAccessor = new();
-            // dataAccessor.Install();
+
+            List<Manager> managers = dataAccessor.GetAll<Manager>();
+            List<Access> accesses = dataAccessor.GetAll<Access>();
+
+            foreach (var item in managers
+    .Join(
+        accesses,
+        m => m.Id,
+        a => a.ManagerId,
+        (m, a) => new
+        {
+            ManagerName = m.Name,
+            Login = a.Login
+        }))
+            {
+                Console.WriteLine($"{item.ManagerName} -- {item.Login}");
+            }
+
+
+            //var list = dataAccessor.MonthlySalesByProductsOrm(1);
+            //foreach (var item in list)
+            //{
+            //    Console.WriteLine($"{item.ProductName} -- {item.Sales}");
+            //}
+
+
+            //var (m1, m2) = dataAccessor.GetSalesInfoByMonth(1);
+            //Console.WriteLine($"Поточний рік: {m1}, Попередній рік: {m2}");
+
+
+            // List<Department> departments = dataAccessor.GetAll<Department>();
+            // List<Manager> managers = dataAccessor.GetAll<Manager>();
+
+            //foreach (var item in managers
+            //  .Join(
+            //      departments,
+            //      m => m.DepartmentID,
+            //      d => d.Id,
+            //      (m, d) => new
+            //      {
+            //          ManagerName = m.Name,
+            //          DepartmentName = d.Name,
+            //      }
+            //  ))
+            // {
+            //     Console.WriteLine($"{item.ManagerName} -- {item.DepartmentName}");
+            // }
+            // Console.WriteLine("====================");
+
+            // Console.WriteLine(
+            // String.Join("\n ", departments
+            //    .GroupJoin(
+            //     managers,
+            //     d => d.Id,
+            //     m => m.DepartmentID,
+            //     (d, mans) => new
+            //     {
+            //         d.Name,
+            //         Cnt = mans.Count(),
+            //         Employee = String.Join("; ", mans.Select(m => m.Name))
+            //     }
+            //     )
+            //     .OrderByDescending(item => item.Cnt)
+            //     .Select(item => String.Format("{0} - ({1} employees): {2} ", item.Name, item.Cnt, item.Employee))
+            //     ));
+
+            // вивести назву відділу, кількість співробітників та їх імена через кому
+            // Вивести: Імя менеджера -- назва відділу у якому він працює
+
+            //dataAccessor.Install();
             //dataAccessor.Seed();
-            List<Product> products = dataAccessor.GetProducts();
+            // dataAccessor.FillSales();
+            //List<Product> products = dataAccessor.GetProducts();
+
+            //Console.WriteLine(dataAccessor.RandomProduct());
+            //Console.WriteLine(dataAccessor.RandomDepartment());
+            //Console.WriteLine(dataAccessor.RandomManager());
+
+            //Console.WriteLine("\n============PRODUCTS===========");
+            //dataAccessor.GetAll<Product>().ForEach(Console.WriteLine);
+            //Console.WriteLine("\n==========DEPARTMENTS==========");
+            //dataAccessor.GetAll<Department>().ForEach(Console.WriteLine);
+            //Console.WriteLine("\n============MANAGERS===========");
+            //dataAccessor.GetAll<Manager>().ForEach(Console.WriteLine);
+            //Console.WriteLine("\n=============NEWS==============");
+            //dataAccessor.GetAll<News>().ForEach(Console.WriteLine);
+
 
             //products.ForEach(Console.WriteLine);
-            dataAccessor.PrintNP();
-            Console.WriteLine("====================");
-            dataAccessor.PrintDesc();
-            Console.WriteLine("====================");
-            dataAccessor.PrintAlphabet();
-            Console.WriteLine("=========TOP========");
+            //dataAccessor.PrintNP();
+            //Console.WriteLine("====================");
+            //dataAccessor.PrintDesc();
+            //Console.WriteLine("====================");
+            //dataAccessor.PrintAlphabet();
+            //Console.WriteLine("=========TOP========");
 
-            dataAccessor.PrintTop();
-            Console.WriteLine("========LOSER=======");
-            dataAccessor.PrintLoser();
+            //dataAccessor.PrintTop();
+            //Console.WriteLine("========LOSER=======");
+            //dataAccessor.PrintLoser();
 
-            Console.WriteLine("=======RANDOM=======");
-            dataAccessor.PrintRandom();
+            //Console.WriteLine("=======RANDOM=======");
+            //dataAccessor.PrintRandom();
 
+            //String input;
 
+            //Console.WriteLine("Enter the month: ");
+            //input = Console.ReadLine();
+
+            //if(int.TryParse(input, out int value))//side effect - змінаЄоточенняЄ - змінна поза иілом функції
+            //{
+            //    Console.WriteLine(dataAccessor.GetSalesByMonth(value));
+            //}
+            //else{
+            //    Console.WriteLine("Not a number");
+            //}
+
+            //Console.WriteLine("Enter the year: ");
+            //input = Console.ReadLine();
+            //if (int.TryParse(input,out int value))
+            //{
+            //    dataAccessor.GetYearStatistics(value);
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Not a number");
+            //}
+
+            //dataAccessor.MonthlySalesByManagersSql(1);
+            //Console.WriteLine("====================");
+            //dataAccessor.MonthlySalesByManagersOrm(1).ForEach(Console.WriteLine);
 
         }
         public void Run1()

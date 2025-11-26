@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Sharp_231.Data.Dto
+{
+    internal class Sale
+    {
+        public Guid Id { get; set; }
+        public Guid ManagerId { get; set; }
+        public Guid ProdutId { get; set; }
+        public DateTime Moment { get; set; }
+        public int Quantity { get; set; }
+
+    }
+}
