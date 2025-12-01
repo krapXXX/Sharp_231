@@ -14,6 +14,79 @@ namespace Sharp_231.Data
     {
         public void Run()
         {
+            DataAccessor dataAccessor = new();
+            foreach (var m in dataAccessor.Top3DailyProducts(CompareMode.ByMoney))
+            {
+                Console.WriteLine(m);
+            }
+            Console.WriteLine("===================");
+            foreach (var m in dataAccessor.Top3DailyProducts(CompareMode.ByQuantity))
+            {
+                Console.WriteLine(m);
+            }
+            Console.WriteLine("===================");
+            foreach (var m in dataAccessor.Top3DailyProducts(CompareMode.ByChecks))
+            {
+                Console.WriteLine(m);
+            }
+            Console.WriteLine("===================");
+            foreach (var s in dataAccessor.EnumSales(10))
+            {
+                Console.WriteLine(s);
+            }
+           List<Sale>sales= [.. dataAccessor.EnumSales(10)];
+
+        }
+
+        public void Run3()
+        {
+            DataAccessor dataAccessor = new();
+
+            //foreach (var dep in dataAccessor.GetDepartments())
+            //{
+            //    Console.WriteLine(dep);
+
+            //    String sql = $"SELECT * FROM Managers M WHERE M.DepartmentId = '{dep.Id}'";
+            //    using SqlCommand cmd = new(sql, dataAccessor.connection);
+            //    using SqlDataReader reader = cmd.ExecuteReader();
+            //    while (reader.Read())
+            //    {
+            //        Console.WriteLine(dataAccessor.FromReader<Manager>(reader));
+            //    }
+            //}
+            Console.WriteLine("=== Departments ===");
+            foreach (var p in dataAccessor.EnumAll<Department>())
+            {
+                Console.WriteLine(p);
+            }
+            Console.WriteLine("=== Products ===");
+            foreach (var p in dataAccessor.EnumAll<Product>())
+            {
+                Console.WriteLine(p);
+            }
+
+            Console.WriteLine("=== Managers ===");
+            foreach (var m in dataAccessor.EnumAll<Manager>())
+            {
+                Console.WriteLine(m);
+            }
+            Console.WriteLine("=== News ===");
+            foreach (var m in dataAccessor.EnumAll<News>())
+            {
+                Console.WriteLine(m);
+            }
+
+
+
+        }
+        private long Fact(uint n)
+        {
+            if (n < 2) return 1;
+            uint m = n - 1;
+            return n * Fact(m);
+        }
+        public void Run2()
+        {
 
             DataAccessor dataAccessor = new();
 
@@ -155,7 +228,7 @@ namespace Sharp_231.Data
 
             //1 - підключення            raw string
             String connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\arina\source\repos\Sharp_231\Data\Database1.mdf;Integrated Security=True";
-           
+
             // ADO.NET - інструментарій(технологія) доступуу до даних у .NET
             SqlConnection connection = new(connectionString);
             //Особливість - уторення об'єкту не відкриває підключення
@@ -163,9 +236,9 @@ namespace Sharp_231.Data
             {
                 connection.Open();//підключення необхідно відкривати окремою командою
             }
-            catch(SqlException ex)
+            catch (SqlException ex)
             {
-                Console.WriteLine("Connection failed: "+ex.Message);
+                Console.WriteLine("Connection failed: " + ex.Message);
             }
 
             //2 - формування та виконання команди
@@ -174,11 +247,11 @@ namespace Sharp_231.Data
             object scalar;
             try
             {
-               scalar = cmd.ExecuteScalar();
+                scalar = cmd.ExecuteScalar();
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
-                Console.WriteLine("Connection failed {0}\n{1}: "+ex.Message,sql);
+                Console.WriteLine("Connection failed {0}\n{1}: " + ex.Message, sql);
                 return;
             }
 

@@ -12,9 +12,43 @@ using System.Threading.Tasks;
 
 namespace Sharp_231.Data
 {
+    public enum CompareMode
+    {
+        ByChecks,
+        ByQuantity,
+        ByMoney
+    }
     internal class DataAccessor
     {
         public readonly SqlConnection connection;
+         
+        #region About Properties
+
+        public int Prop0 { get; set; }  // автозгенеровані аксесори
+        // тільки для читання – розрахункові дані на кшталт довжини вектора чи поточного часу
+        public int Prop1 { get => 10; }
+        // тільки для запису – сідуювання, виведення (запуск процесів через присвоєння)
+        private int _prop2;
+        public int Prop2 { set { _prop2 = value; } }
+        // з різними аксесорами
+        public int Prop3 { get; private set; }
+        public int Prop4 { get; init; }
+        private int _prop5;
+        public int Prop5
+        {
+            get { return _prop5; }
+            set
+            {
+                if (value != _prop5)   // Prop5 = 10  --> set(value = 10)
+                {
+                    _prop5 = value;
+                }
+            }
+        }
+
+
+        #endregion
+
 
         public DataAccessor()
         {
@@ -125,6 +159,42 @@ namespace Sharp_231.Data
         {
             return ExecuteList<News>("SELECT * FROM News");
         }
+        //варіант з генератором
+        public IEnumerable<Department> EnumDepartments() => EnumAll<Department>();
+        public IEnumerable<Product> EnumProducts() => EnumAll<Product>();
+        public IEnumerable<Manager> EnumManagers() => EnumAll<Manager>();
+        public IEnumerable<Sale> EnumSales(int limit = 100)
+        {
+            String sql = "SELECT * FROM Sales";
+            using SqlCommand cmd = new(sql, connection);
+            SqlDataReader? reader;
+            try { reader = cmd.ExecuteReader(); }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed: {0}\n{1}", ex.Message, sql);
+                throw;
+            }
+            try
+            {
+                while (reader.Read())   // читаємо по одному рядку доки є результати
+                {
+                    yield return FromReader<Sale>(reader);
+
+                    // код відновлюється з місця, на якому був зупинений, тобто після yield return
+                    limit -= 1;
+                    if (limit == 0)
+                    {
+                        yield break;   // оператор переривання (зупинки) генератора
+                    }
+                }
+            }
+            finally
+            {
+                reader.Dispose();
+            }
+
+        }
+        public IEnumerable<News> EnumNews() => EnumAll<News>();
         public List<T> GetAll<T>()
         {
             var t = typeof(T);
@@ -140,9 +210,42 @@ namespace Sharp_231.Data
             }
             return ExecuteList<T>($"SELECT * FROM {tableName}");
         }
+        public IEnumerable<T> EnumAll<T>()
+        {
+            var t = typeof(T);
 
-       
-        
+            // визначаємо назву таблиці
+            string tableName;
+            var attr = t.GetCustomAttribute<TableNameAttribute>();
+            if (attr != null)
+                tableName = attr.Value;
+            else
+                tableName = t.Name + "s";
+
+            string sql = $"SELECT * FROM {tableName}";
+            using SqlCommand cmd = new(sql, connection);
+
+            SqlDataReader? reader;
+            try
+            {
+                reader = cmd.ExecuteReader();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed: {0}\n{1}", ex.Message, sql);
+                throw;
+            }
+
+            while (reader.Read())
+            {
+                yield return FromReader<T>(reader);
+            }
+
+            reader.Dispose();
+        }
+
+
+
         public void Install()
         {
             InstallProducts();
@@ -627,10 +730,16 @@ namespace Sharp_231.Data
 
             return result;
         }
+        public IEnumerable<ProdSaleModel> Top3DailyProducts(CompareMode compareMode)
+        {
+            return null;
+        }
 
 
-
-
+        /*
+         orm - перетворення з необ'єктного в об'єктне представлення(json)
+         linq - набір інмтрументів у вигляді методів розширення, для колекцій(написання query на шарпі)
+         */
     }
 
 }
