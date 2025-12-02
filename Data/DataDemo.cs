@@ -15,26 +15,29 @@ namespace Sharp_231.Data
         public void Run()
         {
             DataAccessor dataAccessor = new();
+
+            var products = dataAccessor.GetAll<Product>().ToDictionary(p => p.Id);
+
+            foreach (var s in dataAccessor.EnumSales(10))
+            {
+                s.Product = products[s.ProductId];
+            }
+            
+            Console.WriteLine("==========ByMoney===========");
             foreach (var m in dataAccessor.Top3DailyProducts(CompareMode.ByMoney))
             {
                 Console.WriteLine(m);
             }
-            Console.WriteLine("===================");
+            Console.WriteLine("=========ByQuantity=========");
             foreach (var m in dataAccessor.Top3DailyProducts(CompareMode.ByQuantity))
             {
                 Console.WriteLine(m);
             }
-            Console.WriteLine("===================");
+            Console.WriteLine("==========ByChecks=========");
             foreach (var m in dataAccessor.Top3DailyProducts(CompareMode.ByChecks))
             {
                 Console.WriteLine(m);
             }
-            Console.WriteLine("===================");
-            foreach (var s in dataAccessor.EnumSales(10))
-            {
-                Console.WriteLine(s);
-            }
-           List<Sale>sales= [.. dataAccessor.EnumSales(10)];
 
         }
 

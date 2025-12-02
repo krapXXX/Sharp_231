@@ -10,9 +10,16 @@ namespace Sharp_231.Data.Dto
     {
         public Guid Id { get; set; }
         public Guid ManagerId { get; set; }
-        public Guid ProdutId { get; set; }
+        public Guid ProductId { get; set; }
         public DateTime Moment { get; set; }
         public int Quantity { get; set; }
+        public Product? Product { get; set; }
+
+        public override string ToString()
+        {
+            return $"[{Moment:MM:d}] {Product?.Name}, amount: {Quantity}";
+        }
+
 
     }
 }

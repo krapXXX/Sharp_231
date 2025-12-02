@@ -12,6 +12,11 @@ namespace Sharp_231.Data.Dto
         public int Checks { get; set; }
         public int Quantity { get; set; }
         public double Money { get; set; }
+        public override string ToString()
+        {
+            return $"{Product.Name} - checks: {Checks}, qty: {Quantity}, money: {Money:F2}";
+        }
+
 
     }
 }

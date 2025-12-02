@@ -168,32 +168,31 @@ namespace Sharp_231.Data
             String sql = "SELECT * FROM Sales";
             using SqlCommand cmd = new(sql, connection);
             SqlDataReader? reader;
+
             try { reader = cmd.ExecuteReader(); }
             catch (Exception ex)
             {
                 Console.WriteLine("Failed: {0}\n{1}", ex.Message, sql);
                 throw;
             }
+
             try
             {
-                while (reader.Read())   // читаємо по одному рядку доки є результати
+                while (reader.Read())
                 {
                     yield return FromReader<Sale>(reader);
 
-                    // код відновлюється з місця, на якому був зупинений, тобто після yield return
-                    limit -= 1;
+                    limit--;
                     if (limit == 0)
-                    {
-                        yield break;   // оператор переривання (зупинки) генератора
-                    }
+                        yield break;
                 }
             }
             finally
             {
                 reader.Dispose();
             }
-
         }
+
         public IEnumerable<News> EnumNews() => EnumAll<News>();
         public List<T> GetAll<T>()
         {
@@ -479,14 +478,15 @@ namespace Sharp_231.Data
         }
         public void FillSales()
         {
-            String sql = "Insert into Sales(id, managerId,productId, quantity, moment)values" +
-                "(Newid()," +
-                "(select top 1 id from managers order by newid())," +
-                "(select top 1 id from products order by newid())," +
-                "(select 1+abs(CHECKSUM (newid()))% 10)," +
-                "(select dateadd(minute, abs(CHECKSUM (newid()))% 525600, '2024-01-01'))" +
-                ")";
-
+            String sql = @"
+        insert into Sales(id, managerId, productId, quantity, moment)
+        values (
+            newid(),
+            (select top 1 id from managers order by newid()),
+            (select top 1 id from products order by newid()),
+            (select 1 + abs(checksum(newid())) % 10),
+            dateadd(minute, abs(checksum(newid())) % 1440, cast(convert(date, getdate()) as datetime))
+        )";
 
             using SqlCommand cmd = new(sql, connection);
             try
@@ -552,6 +552,30 @@ namespace Sharp_231.Data
                 Console.WriteLine("{0} -- {1:F2}", p.Name, p.Price);
             }
         }
+        public void PrintTop3DailyProducts(CompareMode compareMode)
+        {
+            var list = Top3DailyProducts(compareMode).ToList();
+
+            if (list.Count == 0)
+            {
+                Console.WriteLine("No sales today.");
+                return;
+            }
+
+            Console.WriteLine($"\nTop-3 today ({compareMode}):\n");
+
+            int i = 1;
+            foreach (var item in list)
+            {
+                Console.WriteLine(
+                    $"{i}. {item.Product.Name} – checks: {item.Checks}, qty: {item.Quantity}, money: {item.Money:F2}"
+                );
+                i++;
+            }
+
+            Console.WriteLine();
+        }
+
         public Product RandomProduct()
         {
             return ExecuteScalar<Product>(
@@ -730,10 +754,42 @@ namespace Sharp_231.Data
 
             return result;
         }
-        public IEnumerable<ProdSaleModel> Top3DailyProducts(CompareMode compareMode)
+        public IEnumerable<ProdSaleModel> Top3DailyProducts(CompareMode mode)
         {
-            return null;
+            var sales = EnumSales().ToList();
+
+            var products = GetAll<Product>().ToDictionary(p => p.Id);
+
+            DateTime today = DateTime.Today;
+
+            var groups =
+                sales
+                .Where(s => s.Moment.Date == today)
+                .GroupBy(s => s.ProductId)
+                .Select(g =>
+                {
+                    var p = products[g.Key];
+
+                    return new ProdSaleModel
+                    {
+                        Product = p,
+                        Checks = g.Count(),
+                        Quantity = g.Sum(x => x.Quantity),
+                        Money = g.Sum(x => x.Quantity * p.Price)
+                    };
+                });
+
+            return mode switch
+            {
+                CompareMode.ByMoney => groups.OrderByDescending(g => g.Money).Take(3),
+                CompareMode.ByQuantity => groups.OrderByDescending(g => g.Quantity).Take(3),
+                CompareMode.ByChecks => groups.OrderByDescending(g => g.Checks).Take(3),
+                _ => Enumerable.Empty<ProdSaleModel>(),
+            };
         }
+
+
+
 
 
         /*
