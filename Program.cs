@@ -1,4 +1,5 @@
 ﻿//Колекції: можуть мати об'єкти різного типу, не обов'язково послідовні, варіативний розмір
+using Sharp_231.AsyncProgramming;
 using Sharp_231.Collection;
 using Sharp_231.Data;
 using Sharp_231.Dict;
@@ -24,7 +25,8 @@ try
 {
     Console.OutputEncoding = System.Text.Encoding.Unicode;
     Console.InputEncoding = System.Text.Encoding.Unicode;
-    new DataDemo().Run();
+    //new DataDemo().Run();
+    new AsyncProgramming().Run();
 }
 catch (Exception ex)
 {
