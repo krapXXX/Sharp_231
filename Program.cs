@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 Console.OutputEncoding = Encoding.UTF8;
 
@@ -27,6 +28,11 @@ try
     Console.InputEncoding = System.Text.Encoding.Unicode;
     //new DataDemo().Run();
     new AsyncProgramming().Run();
+    //  new Threading().Run();
+    //var t = new ThreadJoin();
+    //var h = GCHandle.Alloc(t);
+    //t.Run();
+    //h.Free();
 }
 catch (Exception ex)
 {
@@ -35,6 +41,8 @@ catch (Exception ex)
     //у режимі розробника це ще може бути error-page
     Console.WriteLine("Не оброблений у програмі виняток: " + ex.ToString());
 }
+
+Console.WriteLine("Main finished.");
 void ShowReflection()
 {
     /*
