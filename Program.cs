@@ -10,6 +10,7 @@ using Sharp_231.Files;
 using Sharp_231.Fractions;
 using Sharp_231.Library;
 using Sharp_231.Vectors;
+using SharpKnP321.AsyncProgramming;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
@@ -27,10 +28,16 @@ try
     Console.OutputEncoding = System.Text.Encoding.Unicode;
     Console.InputEncoding = System.Text.Encoding.Unicode;
     //new DataDemo().Run();
-    new AsyncProgramming().Run();
+    //new AsyncProgramming().Run();
     //  new Threading().Run();
-    //var t = new ThreadJoin();
-    //var h = GCHandle.Alloc(t);
+    //new BreakfastTask().Run();
+    //new TaskDemo().Run();
+    new TaskRandomNumbers().Run();
+    //new Continuations().Run();
+
+    //запуск системних задач, які орієнтуються на pointers краще робити в умовах фіксованих розміщень об'єктів
+    //var t = new ThreadPooling();
+    //var h = GCHandle.Alloc(t, GCHandleType.Pinned);
     //t.Run();
     //h.Free();
 }

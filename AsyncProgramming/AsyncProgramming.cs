@@ -11,6 +11,7 @@ namespace Sharp_231.AsyncProgramming
     {
         private readonly object _sumLock = new object();
         private double sum;
+        private readonly object _numbersLock = new object();
 
         public void Run()
         {
@@ -26,6 +27,7 @@ namespace Sharp_231.AsyncProgramming
                 Console.WriteLine("4. Threads demo");
                 Console.WriteLine("5. Multi thread");
                 Console.WriteLine("6. Open browser (URL)");
+                Console.WriteLine("7. Random numbers collection");
                 Console.WriteLine("0. Exit program");
 
                 keyInfo = Console.ReadKey();
@@ -53,6 +55,9 @@ namespace Sharp_231.AsyncProgramming
                     case '6':
                         OpenBrowserUrl("https://www.google.com/search?q=async+await+c%23");
                         break;
+                    case '7':
+                        RandomNumbersCollection();
+                        break;
                     default:
                         Console.WriteLine("Wrong choice!");
                         break;
@@ -60,6 +65,54 @@ namespace Sharp_231.AsyncProgramming
             }
             while (true);
         }
+        private void RandomNumbersCollection()
+        {
+            Console.Write("введіть кількість чисел для генерування: ");
+            if (!int.TryParse(Console.ReadLine(), out int n) || n <= 0)
+            {
+                Console.WriteLine("Некоректне число!");
+                return;
+            }
+
+            var numbers = new List<int>(capacity: n);
+            using var done = new CountdownEvent(n); 
+
+            for (int i = 0; i < n; i++)
+            {
+                new Thread(() =>
+                {
+                    try
+                    {
+                        int value = RandomNumberService(); 
+
+                        lock (_numbersLock)
+                        {
+                            numbers.Add(value);
+                            Console.WriteLine("[" + string.Join(", ", numbers) + "]");
+                        }
+                    }
+                    finally
+                    {
+                        done.Signal(); 
+                    }
+                })
+                { IsBackground = true }.Start();
+            }
+
+            done.Wait();
+
+            lock (_numbersLock)
+            {
+                Console.WriteLine("Result: [" + string.Join(", ", numbers) + "]");
+            }
+        }
+        private int RandomNumberService()
+        {
+            Thread.Sleep(1000); 
+            return Random.Shared.Next(1, 100);           
+        }
+
+
         private void MultiThread()
         {
             sum = 100.0;
