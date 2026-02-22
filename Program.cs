@@ -32,8 +32,10 @@ try
     //  new Threading().Run();
     //new BreakfastTask().Run();
     //new TaskDemo().Run();
-    new TaskRandomNumbers().Run();
+    //new TaskRandomNumbers().Run();
     //new Continuations().Run();
+    new AsyncAwaitHw().Run().Wait();
+    //new NetworkingDemo().Run().Wait();
 
     //запуск системних задач, які орієнтуються на pointers краще робити в умовах фіксованих розміщень об'єктів
     //var t = new ThreadPooling();
