@@ -13,20 +13,31 @@ namespace Sharp_231.Networking
 {
     internal class NetworkingDemo
     {
-        public async Task Run33()
+        public async Task Run()
         {
-            Console.WriteLine("Робота з API");
+            Console.WriteLine("Working with API");
 
             MoonApi moonApi = new();
 
-            //MoonPhase todayPhase = moonApi.TodayPhaseAsync().Result;
-            //Console.WriteLine("{0} {1}", todayPhase.PhaseName, todayPhase.Lighting);
+            Console.Write("Enter date: ");
+            string? input = Console.ReadLine();
 
-            MoonPhase tomorrowPhase = moonApi.PhaseByDateAsync(new DateOnly(2026, 2, 24)).Result;
+            if (!DateOnly.TryParseExact(
+                    input,
+                    "dd.MM.yyyy",
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None,
+                    out DateOnly date))
+            {
+                Console.WriteLine("Invalid date format.");
+                return;
+            }
 
-            Console.WriteLine("{0} ({1})",tomorrowPhase.PhaseName, tomorrowPhase.Lighting);
+            MoonPhase phase = moonApi.PhaseByDateAsync(date).Result;
+
+            Console.WriteLine("{0} ({1})", phase.PhaseName, phase.Lighting);
         }
-        public async Task Run()
+        public async Task RunXml()
         {
             Console.WriteLine("NBU exchange rates for a selected date (XML)");
 
