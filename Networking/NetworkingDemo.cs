@@ -28,6 +28,31 @@ namespace Sharp_231.Networking
         }
         public async Task Run()
         {
+            Console.WriteLine("NBU exchange rates for a selected date (XML)");
+
+            DateOnly date = ReadPastDateFromConsole();
+
+            string url =
+                $"https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date={date:yyyyMMdd}";
+
+            using HttpClient client = new HttpClient();
+            string xmlString = await client.GetStringAsync(url);
+
+            List<NbuRateXml> rates = NbuRateXml.ListFromXmlString(xmlString);
+
+            Console.WriteLine();
+            Console.WriteLine($"Date: {date:dd.MM.yyyy}");
+            Console.WriteLine($"Currencies count: {rates.Count}");
+            Console.WriteLine("====================================");
+
+            foreach (NbuRateXml rate in rates)
+            {
+                Console.WriteLine(rate);
+            }
+        }
+
+        public async Task RunUrl()
+        {
             Console.WriteLine("NBU exchange rates for a selected date");
 
             DateOnly date = ReadPastDateFromConsole();
