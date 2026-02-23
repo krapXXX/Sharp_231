@@ -1,15 +1,114 @@
-﻿using System;
+﻿using Sharp_231.AsyncProgramming;
+using Sharp_231.Networking.Api;
+using Sharp_231.Networking.Orm;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Sharp_231.AsyncProgramming
+namespace Sharp_231.Networking
 {
     internal class NetworkingDemo
     {
+        public async Task Run33()
+        {
+            Console.WriteLine("Робота з API");
+
+            MoonApi moonApi = new();
+
+            //MoonPhase todayPhase = moonApi.TodayPhaseAsync().Result;
+            //Console.WriteLine("{0} {1}", todayPhase.PhaseName, todayPhase.Lighting);
+
+            MoonPhase tomorrowPhase = moonApi.PhaseByDateAsync(new DateOnly(2026, 2, 24)).Result;
+
+            Console.WriteLine("{0} ({1})",tomorrowPhase.PhaseName, tomorrowPhase.Lighting);
+        }
         public async Task Run()
+        {
+            Console.WriteLine("NBU exchange rates for a selected date");
+
+            DateOnly date = ReadPastDateFromConsole();
+
+            string url =
+                $"https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date={date:yyyyMMdd}&json";
+
+            using HttpClient client = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(url)
+            };
+
+            Console.Write(DateTime.Now.Ticks / 10000 % 100000);
+            Console.WriteLine(" request start");
+
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            Console.Write(DateTime.Now.Ticks / 10000 % 100000);
+            Console.WriteLine(" request finish");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"HTTP/{response.Version} {(int)response.StatusCode} {response.ReasonPhrase}");
+                return;
+            }
+
+            string jsonString = await response.Content.ReadAsStringAsync();
+
+            List<NbuRate> rates = NbuRate.ListFromJsonString(jsonString);
+
+            Console.WriteLine();
+            Console.WriteLine($"Date: {date:dd.MM.yyyy}");
+            Console.WriteLine($"Currencies count: {rates.Count}");
+            Console.WriteLine("====================================");
+
+            foreach (NbuRate rate in rates)
+            {
+                Console.WriteLine(rate);
+            }
+        }
+
+        private static DateOnly ReadPastDateFromConsole()
+        {
+            while (true)
+            {
+                Console.Write("Enter date: ");
+                string? input = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    Console.WriteLine("Empty input. Try again.");
+                    continue;
+                }
+
+                string[] formats = { "dd.MM.yyyy", "yyyy-MM-dd" };
+
+                if (!DateTime.TryParseExact(input.Trim(), formats,
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out DateTime dt))
+                {
+                    Console.WriteLine("Invalid date format.");
+                    continue;
+                }
+
+                DateOnly date = DateOnly.FromDateTime(dt);
+                DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+
+                if (date >= today)
+                {
+                    Console.WriteLine("Date must belong to the past.");
+                    continue;
+                }
+
+                return date;
+            }
+        }
+        public async Task Run2()
         {
             using HttpClient client = new HttpClient();
 
@@ -55,14 +154,14 @@ namespace Sharp_231.AsyncProgramming
             Console.Write(DateTime.Now.Ticks / 10000 % 100000); Console.WriteLine(" request start");
 
             HttpResponseMessage response = await responseTask;
-            Task<String> contentTask = response.Content.ReadAsStringAsync();
+            Task<string> contentTask = response.Content.ReadAsStringAsync();
 
             Console.WriteLine(DateTime.Now.Ticks / 10000 % 100000); Console.WriteLine(" request finish");
 
-            Console.WriteLine($"HTTP/{response.Version} {((int)response.StatusCode)} {response.ReasonPhrase}");
+            Console.WriteLine($"HTTP/{response.Version} {(int)response.StatusCode} {response.ReasonPhrase}");
             foreach (var header in response.Headers)
             {
-                Console.WriteLine("{0}: {1}", header.Key, String.Join(", ", header.Value));
+                Console.WriteLine("{0}: {1}", header.Key, string.Join(", ", header.Value));
             }
             Console.WriteLine();
             Console.WriteLine(await contentTask);
@@ -74,7 +173,7 @@ namespace Sharp_231.AsyncProgramming
             Task<string> getRequest = client.GetStringAsync("https://itstep.org/");
             Console.Write(DateTime.Now.Ticks / 10000 % 100000);
             Console.WriteLine(" Get Start");
-            String requestBody = getRequest.Result;
+            string requestBody = getRequest.Result;
             Console.WriteLine(DateTime.Now.Ticks / 10000 % 100000);
             Console.WriteLine(requestBody);
         }

@@ -9,6 +9,7 @@ using Sharp_231.Extensions;
 using Sharp_231.Files;
 using Sharp_231.Fractions;
 using Sharp_231.Library;
+using Sharp_231.Networking;
 using Sharp_231.Vectors;
 using SharpKnP321.AsyncProgramming;
 using System.Collections.Generic;
@@ -34,8 +35,8 @@ try
     //new TaskDemo().Run();
     //new TaskRandomNumbers().Run();
     //new Continuations().Run();
-    new CodeLoader().Run().Wait();
-    //new NetworkingDemo().Run().Wait();
+    // new CodeLoader().Run().Wait();
+    new NetworkingDemo().Run().Wait();
 
     //запуск системних задач, які орієнтуються на pointers краще робити в умовах фіксованих розміщень об'єктів
     //var t = new ThreadPooling();
