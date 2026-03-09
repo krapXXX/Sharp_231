@@ -11,21 +11,67 @@ namespace Sharp_231.Networking
 {
     internal class EmailDemo
     {
+        private string? server, email, password;
+        private int port;
+        private bool isSsl;
+        private bool isLoaded = false;
+
         public void Run()
         {
-            Console.WriteLine("Робота з електронною поштою. SMTP");
+            Console.WriteLine("Working with E-mail. SMTP");
+
+            MailMessage mailMessage = new()
+            {
+                From = new MailAddress(GetEmail()),
+                IsBodyHtml = true,
+                Subject = "Message from Sharp",
+                Body = "<html><h1>Dear user!</h1><p>" +
+                "Be healthy and happy!<p><a style='background:maroon;" +
+                "color:snow;border-radius:10px;padding:7px 12px' " +
+                "href='https://itstep.org'>Study</a></html>",
+            };
+            mailMessage.To.Add(new MailAddress("min.arrrsss@gmail.com"));
+
+            try
+            {
+                SendEmail(mailMessage);
+                Console.WriteLine("Message sent successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"E-mail sending error: {ex.Message}");
+            }
+        }
+
+        private void SendEmail(MailMessage mailMessage)
+        {
+            LoadConfig();
+
+            using SmtpClient smtpClient = new()
+            {
+                Host = server!,
+                Port = port,
+                EnableSsl = isSsl,
+                Credentials = new NetworkCredential(email, password)
+            };
+
+            smtpClient.Send(mailMessage);
+        }
+
+        private void LoadConfig()
+        {
+            if (isLoaded) return;
+
             string settingsFilename = "appsettings.json";
             if (!File.Exists(settingsFilename))
             {
-                Console.WriteLine("Не знайдено файл конфігурації. Перегляньте README");
-                return;
+                throw new Exception("Configuration file not found. Check README");
             }
+
             var settings = JsonSerializer.Deserialize<JsonElement>(
                 File.ReadAllText(settingsFilename)
-                );
-            string server, email, password;
-            int port;
-            bool isSsl;
+            );
+
             try
             {
                 var emailSection = settings.GetProperty("Emails");
@@ -39,33 +85,16 @@ namespace Sharp_231.Networking
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Помилка визначення конфігурації: {ex.Message}");
-                return;
+                throw new Exception($"Configuration error: {ex.Message}");
             }
-            using SmtpClient smtpClient = new()
-            {
-                Host = server,
-                Port = port,
-                EnableSsl = isSsl,
-                Credentials = new NetworkCredential(email, password)
-            };
-            //базова форма - текстові повідомлення
-            // smtpClient.Send(email, "min.arrrsss@gmail.com", "Message from Sharp", "Hello, User!");
 
-            //розширена форма
-            MailMessage mailMessage = new()
-            {
-                From = new MailAddress(email),
-                IsBodyHtml = true,
-                Subject = "Message from Sharp",
-                Body = "<html><h1>Шановний користувач!</h1><p>" +
-                "Шоби ви були здорові!<p><a style='background:maroon;" +
-                "color:snow;border-radius:10px;padding:7px 12px' " +
-                "href='https://itstep.org'>Вчитись</a></html>",
-            };
-            mailMessage.To.Add(new MailAddress("min.arrrsss@gmail.com"));
+            isLoaded = true;
+        }
 
-            smtpClient.Send(mailMessage);
+        private string GetEmail()
+        {
+            LoadConfig();
+            return email!;
         }
     }
 }
