@@ -39,8 +39,8 @@ try
     // new CodeLoader().Run().Wait();
     //new NetworkingDemo().Run().Wait();
     // new EmailDemo().Run();
-    // new UsersDemo().Run();
-    new OtpPass().Run();
+    new UsersDemo().Run();
+    //  new OtpPass().Run();
 
     //запуск системних задач, які орієнтуються на pointers краще робити в умовах фіксованих розміщень об'єктів
     //var t = new ThreadPooling();

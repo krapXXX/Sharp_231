@@ -66,6 +66,7 @@ namespace Sharp_231.Users
         {
             UserData userData = new();
             bool isEntryCorrect;
+            String? userPassword;
 
             Console.WriteLine("Реєстрація нового користувача (порожній ввід - вихід)");
 
@@ -111,11 +112,61 @@ namespace Sharp_231.Users
 
             } while (!isEntryCorrect);
 
-            // подальша логіка збереження користувача...
+            do
+            {
+                Console.Write("Пароль: ");
+                userPassword = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(userPassword))
+                    return;
+
+                userPassword = userPassword.Trim();
+
+                isEntryCorrect = ValidatePassword(userPassword);
+
+            } while (!isEntryCorrect);
+
+            Console.WriteLine("Реєстрацію завершено");
         }
         private void SignIn()
         {
             Console.WriteLine("SignIn");
+        }
+        private bool ValidatePassword(String password)
+        {
+            bool isValid = true;
+
+            if (password.Length < 6)
+            {
+                Console.WriteLine("Пароль повинен містити щонайменше 6 символів");
+                isValid = false;
+            }
+
+            if (!password.Any(Char.IsDigit))
+            {
+                Console.WriteLine("Пароль повинен містити щонайменше одну цифру");
+                isValid = false;
+            }
+
+            if (!password.Any(Char.IsLower))
+            {
+                Console.WriteLine("Пароль повинен містити щонайменше одну малу літеру");
+                isValid = false;
+            }
+
+            if (!password.Any(Char.IsUpper))
+            {
+                Console.WriteLine("Пароль повинен містити щонайменше одну велику літеру");
+                isValid = false;
+            }
+
+            if (!password.Any(c => !Char.IsLetterOrDigit(c)))
+            {
+                Console.WriteLine("Пароль повинен містити щонайменше один спецсимвол");
+                isValid = false;
+            }
+
+            return isValid;
         }
     }
 }
