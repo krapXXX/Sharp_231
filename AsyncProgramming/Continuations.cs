@@ -11,10 +11,14 @@ namespace SharpKnP321.AsyncProgramming
         
         public void Run()
         {
+
             Console.WriteLine(
          Task.Run(GetString)
         .ContinueWith(t => Spacefy(t.Result))
         .ContinueWith(t => Capitalyze(t.Result))
+        .ContinueWith(t => InvertWords(t.Result))
+        .ContinueWith(t => Caesar(t.Result))
+        .ContinueWith(t => HideWords(t.Result))
         .ContinueWith(t => Slugify(t.Result))
         .Result);
         }
@@ -86,6 +90,50 @@ namespace SharpKnP321.AsyncProgramming
             Task.Delay(1000).Wait();
             String res = (Regex.Replace(str, @"\W+", glue)).ToLower().Trim(glue.ToCharArray());
             Console.WriteLine($"Slugify: '{str}' - > '{res}'");
+            return res;
+        }
+        private String InvertWords(String str)
+        {
+            Task.Delay(1000).Wait();
+            String res = String.Join(' ', str.Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => new string(s.Reverse().ToArray())));
+            Console.WriteLine($"InvertWords: '{str}' - > '{res}'");
+            return res;
+        }
+
+        private String Caesar(String str, int shift = 3)
+        {
+            Task.Delay(1000).Wait();
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (char c in str)
+            {
+                if (c >= 'a' && c <= 'z')
+                {
+                    sb.Append((char)('a' + (c - 'a' + shift) % 26));
+                }
+                else if (c >= 'A' && c <= 'Z')
+                {
+                    sb.Append((char)('A' + (c - 'A' + shift) % 26));
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+
+            String res = sb.ToString();
+            Console.WriteLine($"Caesar: '{str}' - > '{res}'");
+            return res;
+        }
+
+        private String HideWords(String str, char mask = '*')
+        {
+            Task.Delay(1000).Wait();
+            String res = String.Join(' ', str.Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Length < 3 ? s : $"{s[0]}{new string(mask, s.Length - 2)}{s[^1]}"));
+            Console.WriteLine($"HideWords: '{str}' - > '{res}'");
             return res;
         }
         public void RunWrong()

@@ -35,11 +35,11 @@ try
     //new BreakfastTask().Run();
     //new TaskDemo().Run();
     //new TaskRandomNumbers().Run();
-    //new Continuations().Run();
+    new Continuations().Run();
     // new CodeLoader().Run().Wait();
     //new NetworkingDemo().Run().Wait();
     //new EmailDemo().Run();
-    new UsersDemo().Run();
+    // new UsersDemo().Run();
 
     //запуск системних задач, які орієнтуються на pointers краще робити в умовах фіксованих розміщень об'єктів
     //var t = new ThreadPooling();
